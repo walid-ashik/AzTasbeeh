@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AZ Tasbeeh</string>
+    <string name="zero">00</string>
 </resources>

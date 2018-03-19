@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTasbeehName;
     private TextSwitcher mTextSwitcher;
     private TextView mCountShowTextView;
-    private String[] tasbeehName = {"Allahu Akbar", "Subhanallah", "La Ilaha illallah", "Bismillahir Rahmanir Rahim", "Alhamdulilloh", "Astagfirullah", "La hawla wa la \nquwwata illa billah"};
+    private String[] tasbeehName = {"Allahu Akbar", "Subhanallah", "La Ilaha illallah", "Bismillahir Rahmanir Rahim", "Alhamdulilloh", "Astagfirullah", "La hawla wa la \nquwwata illa billah", "Subhanallah Owa-bihamdi\nSubhanallahil Azim"};
 
     int counterValue;
     int stringIndex = 0;
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         setTasbeehName = tasbeehName[stringIndex];
 
         //change the counter value to zero for shifting new tasbeeh name
-        mCountShowTextView.setText("00");
+        mCountShowTextView.setText(R.string.zero);
         counterValue = 0;
 
     }
