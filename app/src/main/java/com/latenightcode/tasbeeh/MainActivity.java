@@ -16,6 +16,8 @@ import android.widget.ViewSwitcher;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
+import hotchemi.android.rate.AppRate;
+
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout mButtonCountLayout;
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         target = new ViewTarget(findViewById(R.id.textswitcher_tasbeeh_name));
 
         final Integer colorAccent = getResources().getColor(R.color.colorAccent);
-        String getCounterNumberFromTextView = mCountShowTextView.getText().toString();
         counterValue = 0;
 
         mTextSwitcher.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +98,20 @@ public class MainActivity extends AppCompatActivity {
         if(firstStart){
             setTourGuide(target);
         }
+
+        setAppRate();
+
+    }
+
+    private void setAppRate() {
+
+        AppRate.with(MainActivity.this)
+                .setInstallDays(1)
+                .setLaunchTimes(3)
+                .setRemindInterval(2)
+                .monitor();
+
+        AppRate.showRateDialogIfMeetsConditions(MainActivity.this);
 
     }
 
