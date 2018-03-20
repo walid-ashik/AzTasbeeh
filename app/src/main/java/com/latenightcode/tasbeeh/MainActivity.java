@@ -1,6 +1,7 @@
 package com.latenightcode.tasbeeh;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,7 +91,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //setting tour guide of app
+        SharedPreferences sharedPreferences = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+        boolean firstStart = sharedPreferences.getBoolean("FIRST_START", true);
+
+        if(firstStart){
+            setTourGuide(target);
+        }
+
+    }
+
+    private void setTourGuide(ViewTarget target) {
+
         new ShowcaseView.Builder(this)
                 .setContentTitle("Cilck and explore new tasbeeh")
                 .setContentText("Click on Tasbeeh Name \"Allahu Akbar\" to set another Tasbeeh")
@@ -98,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
                 .setTarget(target)
                 .setStyle(R.style.CustomShowcaseTheme3)
                 .build();
+
+        SharedPreferences preferences = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("FIRST_START", false);
+        editor.apply();
+
     }
 
     private void getTasbeehNameAndChangeTextViewValue() {
