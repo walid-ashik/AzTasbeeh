@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout mButtonCountLayout;
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     int stringIndex = 0;
     private String setTasbeehName;
 
+    //showcase view
+    ViewTarget target;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         mTextSwitcher = findViewById(R.id.textswitcher_tasbeeh_name);
         mButtonCountLayout = findViewById(R.id.button_linearlayout);
         mCountShowTextView = findViewById(R.id.textview_count);
+        target = new ViewTarget(findViewById(R.id.textswitcher_tasbeeh_name));
 
         final Integer colorAccent = getResources().getColor(R.color.colorAccent);
         String getCounterNumberFromTextView = mCountShowTextView.getText().toString();
@@ -85,7 +91,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //setting tour guide of app
-
+        new ShowcaseView.Builder(this)
+                .setContentTitle("Cilck and explore new tasbeeh")
+                .setContentText("Click on Tasbeeh Name \"Allahu Akbar\" to set another Tasbeeh")
+                .useDecorViewAsParent()
+                .setTarget(target)
+                .setStyle(R.style.CustomShowcaseTheme3)
+                .build();
     }
 
     private void getTasbeehNameAndChangeTextViewValue() {
