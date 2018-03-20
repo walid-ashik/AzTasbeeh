@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //setting tour guide of app
+
     }
 
     private void getTasbeehNameAndChangeTextViewValue() {
