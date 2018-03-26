@@ -2,9 +2,9 @@ package com.latenightcode.tasbeeh;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,8 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.facebook.stetho.Stetho;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import hotchemi.android.rate.AppRate;
 
@@ -33,9 +38,14 @@ public class MainActivity extends AppCompatActivity {
     //showcase view
     ViewTarget target;
 
+    //Database
+    DatabaseHelper mDatabase;
+    private String countedTasbeehName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_main);
 
         mTextSwitcher = findViewById(R.id.textswitcher_tasbeeh_name);
@@ -46,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         final Integer colorAccent = getResources().getColor(R.color.colorAccent);
         counterValue = 0;
 
+        mDatabase = new DatabaseHelper(this);
+
         mTextSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,13 +67,11 @@ public class MainActivity extends AppCompatActivity {
                     stringIndex = 0;
                     mTextSwitcher.setText(tasbeehName[stringIndex]);
                     getTasbeehNameAndChangeTextViewValue();
-
                 }else{
-
                     mTextSwitcher.setText(tasbeehName[++stringIndex]);
                     getTasbeehNameAndChangeTextViewValue();
-
                 }
+
 
             }
         });
@@ -80,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //first one indexed tasbeehName Show this
         mTextSwitcher.setText(tasbeehName[stringIndex]);
 
         mButtonCountLayout.setOnClickListener(new View.OnClickListener() {
@@ -137,9 +148,36 @@ public class MainActivity extends AppCompatActivity {
         //getting selected tasbeeh name from user
         setTasbeehName = tasbeehName[stringIndex];
 
+        //Get Counting Tasbeeh Name
+        if(stringIndex == 0){
+            countedTasbeehName = tasbeehName[tasbeehName.length - 1];
+        }else{
+            countedTasbeehName = tasbeehName[stringIndex - 1];
+        }
+        Log.d("TASBEEH NAME: ", "clicked: " + countedTasbeehName);
+
+        //Not save if no count is recorded
+        if(counterValue != 0){
+            //SAVE TO DATABASE
+            addToDatbase(countedTasbeehName, counterValue);
+        }
+
         //change the counter value to zero for shifting new tasbeeh name
         mCountShowTextView.setText(R.string.zero);
         counterValue = 0;
 
+    }
+
+    private void addToDatbase(String getTasbeehName, int counterValue) {
+
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        
+        boolean isInserted = mDatabase.insertData(date, getTasbeehName, counterValue);
+        
+        if(isInserted)
+            Toast.makeText(this, "Data inserted", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "Error Occured..data can't insert", Toast.LENGTH_SHORT).show();
+        
     }
 }
